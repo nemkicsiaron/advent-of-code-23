@@ -44,7 +44,7 @@ fn compare_hands(lhs: &str, rhs: &str) -> std::cmp::Ordering {
 
 fn hand_power(hand: &str) -> i32 {
     let mut cards: HashMap<char, i32> = HashMap::new();
-    let mut pow = 0;
+    let mut pow = 1;
     //assert_eq!(cards.get(&'A'), None);
 
     for char in hand.chars() {
@@ -71,21 +71,18 @@ fn hand_power(hand: &str) -> i32 {
         }
     } else if cards_len == 4 {
         pow = 2
-    } else {
-        pow = 1;
     }
 
     return pow;
 }
 
 fn part_one(arr: Vec<&str>) -> i32 {
-    let max_award = arr.len();
     let mut total: i32 = 0;
     let mut hands = Vec::new();
     let mut bets: HashMap<&str, i32> = HashMap::new();
 
     for line in arr {
-        let mut sl: Vec<&str> = line.split(" ").collect();
+        let sl: Vec<&str> = line.split(" ").collect();
         hands.push(sl[0]);
         bets.insert(sl[0], sl[1].parse().unwrap());
     }
@@ -103,7 +100,7 @@ fn part_one(arr: Vec<&str>) -> i32 {
     return total;
 }
 
-pub fn main(num: String) -> String {
+pub fn main() {
     let example = "32T3K 765
 T55J5 684
 KK677 28
@@ -1109,10 +1106,8 @@ TA4Q3 723
 36336 179
 9Q494 706
 87JK6 77";
-    let mut arr: Vec<&str> = input.split("\n").collect();
+    let arr: Vec<&str> = input.split("\n").collect();
 
     //println!("{:?}", arr[0].chars().nth(0).unwrap());
     println!("{:?}", part_one(arr));
-
-    return "".to_string();
 }
