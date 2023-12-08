@@ -1,5 +1,9 @@
 *.exe
 *.pdb
+*.txt
+*.toml
+*.lock
 .*/
 bin/
 lib/
+target/
