@@ -1,14 +1,14 @@
 use std::collections::HashMap;
 use std::convert::TryInto;
 
-mod one;
+//mod one;
 
 fn rank(card: char) -> i32 {
     match card {
         'A' => 14,
         'K' => 13,
         'Q' => 12,
-        'J' => 11,
+        'J' => 0,
         'T' => 10,
         _    => card.to_digit(10).unwrap().try_into().unwrap()
     }
@@ -54,9 +54,13 @@ fn hand_power(hand: &str) -> i32 {
     }
 
     let jokers = cards.remove(&'J').unwrap_or(0);
-    let bestcard = cards.iter().max_by(|a, b| a.1.cmp(&b.1)).map(|(k, _v)| k).unwrap_or(&'A');
+    let bestcard = *cards.iter().max_by(|a, b| if a.1.eq(&b.1) {a.cmp(&b)} else {a.1.cmp(&b.1)}).map(|(k, _v)| k).unwrap_or(&'A');
     //println!("{}", bestcard);
-    cards.entry(*bestcard).and_modify(|x| *x += jokers);
+    cards.entry(bestcard).and_modify(|x| *x += jokers).or_insert(jokers);
+
+    if hand == "JJJJ7" {
+        println!("{0} appears {1} times", bestcard, cards.get(&bestcard).unwrap());
+    }
 
     let cards_len = cards.len();
 
@@ -101,7 +105,13 @@ fn part_two(arr: Vec<&str>) -> i32 {
         total += addage * bets.get(hand).unwrap();
     }
 
-    //println!("{:?}", hands);
+    match compare_hands("JJJJ7", "JJJ88") {
+        std::cmp::Ordering::Less => println!("Less than JJJ88."),
+        std::cmp::Ordering::Greater => println!("Greater than JJJ88."),
+        std::cmp::Ordering::Equal => println!("Equal to JJJ88."),
+    }
+
+    //println!("{:#?} {0}", compare_hands("JJJJJ", "JJJ88"));
     //println!("{:?}", bets);
 
     return total;
@@ -119,13 +129,13 @@ pub fn main() {
 mod tests {
     use super::*;
 
-    #[test]
-    fn pt1_test() {
-        let input = include_str!("../example.txt");
-        let arr: Vec<&str> = input.split("\r\n").collect();
-        let result = one::part_one(arr);
-        assert_eq!(result, 6440);
-    }
+    // #[test]
+    // fn pt1_test() {
+    //     let input = include_str!("../example.txt");
+    //     let arr: Vec<&str> = input.split("\r\n").collect();
+    //     let result = one::part_one(arr);
+    //     assert_eq!(result, 6440);
+    // }
 
     #[test]
     fn pt2_test() {
