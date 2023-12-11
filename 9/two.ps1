@@ -1,4 +1,4 @@
-function Is-ZeroRow {
+﻿function Is-ZeroRow {
     [OutputType([bool])]
     param (
         [int[]]$nums
@@ -12,7 +12,7 @@ function Is-ZeroRow {
     return $true
 }
 
-function Calculate-NextElement {
+function Calculate-PrevElement {
     param (
         [int[]]$array
     )
@@ -22,9 +22,9 @@ function Calculate-NextElement {
     }
 
     if ($nextArray.Count -le 1 -or (Is-ZeroRow -nums $nextArray)) {
-        return $array[$array.Count - 1]
+        return $array[0]
     }
-    return $array[$array.Count - 1] + (Calculate-NextElement -array $nextArray)
+    return $array[0] - (Calculate-PrevElement -array $nextArray)
 }
 
 # Example usage:
@@ -36,10 +36,10 @@ $arr = $data -split "`n"
 $total = 0
 foreach ($line in $arr) {
     $values = $line.Split(" ") | ForEach-Object { [int]$_ }
-    $nextElement = Calculate-NextElement -array $values
-    #Write-Host $nextElement
+    $nextElement = Calculate-PrevElement -array $values
+    Write-Host $nextElement
     $total += $nextElement
 }
 
-Write-Host "Total of next elements: " $total
+Write-Host "Total of previous elements: " $total
 
